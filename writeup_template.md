@@ -26,8 +26,14 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 Here's is the output of 'distortion correction'
 
-<p align="center">
-<img src='camera_cal/calibration1.jpg' width='40%'>       <img src='output_images/undist_calibration1.jpg' width='40%'>
+<p align="left">
+<img src='camera_cal/calibration1.jpg' width='40%'>
+</p>
+<p align="right">
+<img src='output_images/undist_calibration1.jpg' width='40%'>
+</p>
+<p align="left">
+<img src='camera_cal/calibration1.jpg' width='40%'>  <img src='output_images/undist_calibration1.jpg' width='40%'>
 </p>
 
 
