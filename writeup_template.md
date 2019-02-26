@@ -1,4 +1,4 @@
-# Advanced Lane Detection using OpenCV in Python
+# Advanced Lane Detection using OpenCV and Python
 
 ## Overview
 
