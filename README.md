@@ -4,6 +4,8 @@
   Author:
   -->
 
+<meta name='Lane Detection Python OpenCV' content='regex, regular expressions, regexp'>
+
 ## Advanced Lane Finding
 ![Lanes Image](./examples/example_output.jpg) 
 
