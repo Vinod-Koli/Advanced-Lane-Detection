@@ -24,7 +24,7 @@ I start by preparing "object points", which will be the (x, y, z) coordinates of
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
 
-Here's is the output of 'distortion correction'
+Here's is the output of distortion correction
 
 <p align="center">
 <img src='camera_cal/calibration1.jpg' alt="Original Image" width='45%'>  <img src='output_images/undist_calibration1.jpg' alt="Undistorted Image" width='45%'>
@@ -35,41 +35,83 @@ Here's is the output of 'distortion correction'
 
 ### 1. Distortion Correction
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
+Use the camera matrix and and distortion coefficients computed in above step to undistort images. Following is the one example of distortion corrected image.
+
+<p align="center">
+<img src='test_images/test6.jpg' width='45%'>  <img src='output_images/undist_test6.jpg' width='45%'>
+</p>
 
 
 ### 2. Gradients and Color Threshold
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+#### Gradient Threshold
+
+The undistorted image is then passed through function `apply_grad_thresholds()` to apply gradients in x and y direction and also compute magnitude gradients separately and then combine these images.
+
+Here is the output image after applying gradients
+<p align="center">
+<img src='test_images/test6.jpg' width='45%'>  <img src='output_images/gradient_test6.jpg' width='45%'>
+</p>
+
+#### Color Threshold
+
+Universally the lane lines on the road are marked in **_White_** and **_Yellow_**, and after trying with different color spaces found out that the colors Yellow and White are more prominent in **_HSL(Hue Saturation and Light)_** color space.
+
+Here are the filter values which worked best for me
+##### Filtering White Lines
+From the above model you can easily observe that white colors are present at the top of the cylinder, i.e. higher Lightness value regardless of Hue and Saturation.
+    
+    Hue:        no-filter
+    Lightness:  195 to 255
+    Saturation: no-filter
+
+##### Filtering Yellow Lines
+
+    Hue:        18 to 32
+    Lightness:  120 to 255
+    Saturation: 90 to 255
+
+Here is the output of `apply_color_thresholds`
+<p align="center">
+<img src='test_images/test6.jpg' width='45%'>  <img src='output_images/hsl_test6.jpg' width='45%'>
+</p>
+
+##### Combining the two threshold images we get
+
+<p align="center">
+    <img src='output_images/threshold_test6.jpg' width='45%'>
+</p>
 
 
 ### 3. Perspective Transform
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The function `warp_image()` takes binary threshold image and creates the warped image.
+
+The `warp_image()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
 
 ```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
+    src = np.float32(
+            [[586, 454], 
+            [698, 454], 
+            [272, 674], 
+            [1054, 674]])
+    
+    dst = np.float32(
+            [[225, 0], 
+            [900, 0], 
+            [225, 702], 
+            [900, 702]])
 ```
 
-This resulted in the following source and destination points:
+After applying perspective transform on test images we get the following output
 
-| Source        | Destination   | 
-|:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+<p align="center">
+<img src='test_images/test6.jpg' width='45%'>  <img src='output_images/warped_test6.jpg' width='45%'>
+</p>
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
+<p align="center">
+<img src='output_images/threshold_test6.jpg' width='45%'>  <img src='output_images/warped_binary_test6.jpg' width='45%'>
+</p>
 
 ### 4. Identify Lane Pixels
 
