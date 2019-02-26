@@ -11,4 +11,4 @@ Please refer to `Advanced_Lane_Detection.ipynb` for the code. This file is self 
 
 The test images for the pipeline are stored in the folder `test_images` and the output images after every pipeline step are stored in `output_images` folder.
 
-The final pipeline is run on the `project_video` and the new processed video is created named `output_project_Video`.
+The final pipeline is run on the `project_video` and the new processed video is created, named `output_project_Video`.
