@@ -1,3 +1,9 @@
+<!--
+  Title: Adcanced Lane detection using Python and OpenCV
+  Description: Lane detection using Opencv
+  Author:
+  -->
+
 ## Advanced Lane Finding
 ![Lanes Image](./examples/example_output.jpg) 
 
