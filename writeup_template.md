@@ -71,7 +71,7 @@ From the above model you can easily observe that white colors are present at the
     Lightness:  120 to 255
     Saturation: 90 to 255
 
-Here is the output of `apply_color_thresholds`
+Here is the output of `apply_color_thresholds()`
 <p align="center">
 <img src='test_images/test6.jpg' width='45%'>  <img src='output_images/hsl_test6.jpg' width='45%'>
 </p>
@@ -79,7 +79,7 @@ Here is the output of `apply_color_thresholds`
 ##### Combining the two threshold images we get
 
 <p align="center">
-    <img src='output_images/threshold_test6.jpg' width='45%'>
+    <img src='output_images/test_binary.jpg' width='45%'>
 </p>
 
 
@@ -110,35 +110,58 @@ After applying perspective transform on test images we get the following output
 </p>
 
 <p align="center">
-<img src='output_images/threshold_test6.jpg' width='45%'>  <img src='output_images/warped_binary_test6.jpg' width='45%'>
+<img src='output_images/test_binary.jpg' width='45%'>  <img src='output_images/warped_binary_test6.jpg' width='45%'>
 </p>
 
 ### 4. Identify Lane Pixels
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+The sliding window technique is used to identify the lane pixels in the `warped_bianry` image. The function `sliding_window()` takes binary warped image and finds the pixels belong to left and right lanes. The these pixels are used to fit a second order polynomial equation. This equation best fits our lanes.
 
+THe sliding window is used for the first frame, and once we have got the first lane fitting curves, we can simply search around the previous lanes for pixels in the current frame. So the function `search_around_poly()` takes in previous lane equations and tries to find the lanes pixels in the current image.
+
+Here is the visualization of `sliding_window()` and `search_around_poly()` functions
+
+<p align="center">
+    <img src='output_images/lane_test6.jpg' width='45%'>
+</p>
+
+<p align="center">
+    <img src='output_images/lane1_test6.jpg' width='45%'>
+</p>
 
 ### 5. Compute Radii of Curvature
 
-I did this in lines # through # in my code in `my_other_file.py`
+The function `measure_curvature_pixels()` takes in the (x, y) co-ordinates of the detected lane and then computes the radii pixels. Then this radii is converted from pixels to 'km' using following scale
 
-### 6. Annotation
+    ym_per_pix = 30/720 # meters per pixel in y dimension
+    xm_per_pix = 3.7/700 # meters per pixel in x dimension
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
 
+### 6. Display final image
+
+The detected lanes are perspective transformed back onto the original image, and the detected lane area is highlighted in green color.
+
+Also, the computed radii of curvature is displayed on the upper left corener of the frame. These steps taken care by the function `draw_on_original()`
+
+Here is the final output
+
+<p align="center">
+    <img src='output_images/final_test6.jpg' width='45%'>
+</p>
+---
+
+## Pipeline Run on Video
+After running the pipeline on videos, we can see the lanes are accurately detected in the project video.
+
+Here's a [link to my video result](https://github.com/Vinod-Koli/CarND-Advanced-Lane-Lines/blob/master/output_project_video.mp4)
 
 ---
 
-## Pipeline (video)
+### Future Improvements
 
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+##### 1. This pipeline needs to updated on in Thresholding step to improve the accuracy of lane detection in difficult scenarios.
 
-Here's a [link to my video result](./project_video.mp4)
+There is possibility that `apply_grad_thresholds()` function might detect the lane-like edges which are actually not the lanes. So adding some more filters to remove edges which does not belong to lanes is a tricky part and I would love to solve this challenge during free time.
 
----
+There are ofcourse possibilties of more improvements.
 
-### Discussion
-
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
-
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
