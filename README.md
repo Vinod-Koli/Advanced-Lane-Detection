@@ -5,7 +5,7 @@
 
 The project is written in `Python` using `Jupyter Notebook`. 
 
-The projects incudes various pipeline steps as describe in `Project_Writeup`.
+The projects incudes various pipeline steps as described in `Project_Writeup`.
 
 Please refer to `Advanced_Lane_Detection.ipynb` for the code. This file is self explainatory which walks you through every step with visualization of output images at every step.
 
